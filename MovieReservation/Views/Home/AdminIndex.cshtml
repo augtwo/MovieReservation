@@ -1,0 +1,76 @@
+﻿@model IEnumerable<MovieReservation.DataModel.dbmx.Movie>
+<style>
+    .content {
+        margin-bottom: 30px;
+    }
+</style>
+<div class="content col-md-10">
+    <br />
+    <div class="body-content">
+        <h3>Available Movies</h3>
+        <a class="add-Movie-btn btn btn-default pull-right" href="/Home/AddMovie">+ Add Movie</a>
+        <br /><br />
+        <table class="table table-responsive">
+            <tr>
+                <th></th>
+                <th>Movie Cover</th>
+                <th>Title</th>
+                <th>Schedules</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            @if (Model != null && Model.Count() > 0)
+            {
+                int ctr = 0;
+                foreach (var movie in Model)
+                {
+                    ctr++;
+                    <tr>
+                        <td>@ctr</td>
+                        <td><img src="~/Content/MovieCovers/@movie.Image" width="110" height="150" /></td>
+                        <td>@movie.Title</td>
+                        <td>@movie.Price</td>
+                        <td>
+                            @Html.ActionLink("Edit", "EditMovie", new { id = movie.Id }) |
+                            @Html.ActionLink("Delete", "DeleteMovie", new { id = movie.Id }) |
+                            @Html.ActionLink("Add Schedule", "AddSchedule", "MovieDetail", new { id = movie.Id }, null)
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+
+<div class="col-md-10">
+    <h3>Reservation History</h3>
+
+    <div class="body-content">
+        <table class="table table-responsive">
+            <tr>
+                <th></th>
+                <th>Movie Title</th>
+                <th>Reservation Date</th>
+                <th>Customer Name</th>
+                <th>Seats</th>
+                <th>Reservation Status</th>
+            </tr>
+            @{
+                int count = 0;
+                foreach (var item in ViewBag.History)
+                {
+                    count++;
+                    <tr>
+                        <td>@count</td>
+                        <td>@item.MovieName</td>
+                        <td>@item.ReservationDate</td>
+                        <td>@item.CustomerName</td>
+                        <td>@item.SeatNumber</td>
+                        <td>@item.ReservationStatusName</td>
+                    </tr>
+
+                }
+            }
+        </table>
+    </div>
+</div>
+

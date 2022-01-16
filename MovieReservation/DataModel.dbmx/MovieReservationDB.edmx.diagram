@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2ee0a9c7d7e44c1e9230b463198ca7dc" Name="Diagram1">
+        <EntityTypeShape EntityType="MovieSeatReservationDBModel.Movie" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieSeatReservationDBModel.MovieReserve" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieSeatReservationDBModel.MovieSchedule" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieSeatReservationDBModel.ReservationStatu" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieSeatReservationDBModel.SeatAvailabilityPerSched" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MovieSeatReservationDBModel.Seat" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="MovieSeatReservationDBModel.FK_MovieReservation_Movies" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieSeatReservationDBModel.FK_MovieSchedule_MovieSchedule" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieSeatReservationDBModel.FK_MovieReservation_ReservationStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieSeatReservationDBModel.FK_MovieReservation_Seats" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieSeatReservationDBModel.FK_SeatAvailabilityPerSched_MovieSchedule" ManuallyRouted="false" />
+        <AssociationConnector Association="MovieSeatReservationDBModel.FK_SeatAvailabilityPerSched_Seats" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,72 @@
+﻿@model MovieReservation.Models.MovieModel
+
+<style>
+    .poster {
+        padding-top: 50px;
+    }
+
+    .details {
+        padding-top: 50px;
+    }
+
+    .btn {
+        margin: 10px 0px 10px 0px;
+    }
+</style>
+<div class="container col-md-12">
+    <div class="poster row col-md-5">
+        <img src="~/Content/MovieCovers/@Model.Image" width="300" height="450" />
+    </div>
+    <div class="details row col-md-7">
+        <div class="row">
+            <h3><b>@Model.Title</b></h3>
+        </div>
+        <hr />
+        <div class="row">
+            <p>@Model.Category | @Model.RunTime </p>
+        </div>
+
+        <br />
+        <div class="row">
+            <p><b>Cast:</b></p>
+            <p>@Model.Cast</p>
+        </div>
+
+        <br />
+        <div class="row">
+            <p><b>Synopsis:</b></p>
+
+            <p>@Model.Synopsis</p>
+        </div>
+
+        <br /><br />
+        <div class="row">
+            <h4><b>Schedules:</b></h4>
+            <table class="table-bordered">
+                <tr>
+                    <th class="text-center">Dates</th>
+                    <th class="text-center">Time Schedule</th>
+                </tr>
+                @foreach (var item in ViewBag.Schedules)
+                {
+                    <tr class="text-center">
+                        <td>@item.Key.ToString("MMMM dd, yyyy")</td>
+                        <td>
+                            @foreach (var sched in item.Value)
+                            {
+                                if (sched.ScheduleDate.Date == item.Key.Date)
+                                {
+                                    string text = sched.ScheduleTime.ToString("h:mm tt").ToUpper();
+
+
+                                    @Html.ActionLink(text, "SeatIndex", "Seat", new { id = sched.Id }, new { @class = "btn btn-success"})
+                                }
+
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

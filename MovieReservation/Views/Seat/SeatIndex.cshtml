@@ -1,0 +1,204 @@
+﻿@model MovieReservation.Models.MovieReservationModel
+
+<style>
+    table {
+        border: none;
+    }
+
+    btn {
+        height: 60px;
+        width: 55px;
+        border-radius: 25px;
+        background-color: gray
+    }
+
+    .seats {
+        margin-top: 10px;
+    }
+
+    table {
+        border-spacing: 5px;
+        height: 300px;
+    }
+
+    .clicked {
+        background-color: orangered;
+    }
+
+    .button-seats {
+        padding: 5px;
+    }
+
+    .seats {
+        border-bottom: 2px solid black;
+        align-content: center;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .box {
+        background-color: gray;
+    }
+
+    .form-label {
+        margin-right: 10px;
+    }
+
+    .disabled-button {
+        background-color: black;
+        color: lightgray;
+        height: 32px;
+        width: 44px;
+        border-radius: 5px;
+    }
+</style>
+<div class="seats text-center col-md-12">
+    <div class="row col-md-12">
+        <div class="box">
+            <h3>SCREEN</h3>
+        </div>
+
+    </div>
+    <table class="table1 col-md-4 pull-left">
+        @foreach (var seat in ViewBag.Seats)
+        {
+            <tr>
+                @foreach (var x in seat)
+                {
+                    if (x.Row == 2)
+                    {
+                        string seatNo = x.SeatNumber;
+                        <td class="button-seats">
+                            @if (x.IsSeatAvailable == true)
+                            {
+                                <button name="button" id="@x.SeatNumber" onclick="btnClick(this)" class="btn btn-outline">@x.SeatNumber</button>
+                            }
+                            else
+                            {
+                                <button name="button" disabled class="disabled-button">@x.SeatNumber</button>
+                            }
+
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+
+
+    <table class="table-1 col-md-6 pull-right">
+        @foreach (var seat in ViewBag.Seats)
+        {
+            <tr>
+                @foreach (var x in seat)
+                {
+                    if (x.Row == 1)
+                    {
+                        string seatNo = x.SeatNumber;
+                        <td class="button-seats">
+                            @if (x.IsSeatAvailable == true)
+                            {
+                                <button name="button" id="@x.SeatNumber" onclick="btnClick(this)" class="btn btn-outline">@x.SeatNumber</button>
+                            }
+                            else
+                            {
+                                <button name="button" disabled class="disabled-button btn-outline">@x.SeatNumber</button>
+                            }
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+
+</div>
+
+<div class="row col-md-12">
+    <div class="col-md-12">
+        <h3>Movie: <b>@ViewBag.MovieDetail.Title</b></h3>  | Schedule <label id="movieSched">@ViewBag.MovieSched</label>
+        <hr />
+
+    </div>
+    <div class="col-md-6">
+        <label id="movieId" hidden>@ViewBag.MovieDetail.Id</label>
+        <label id="movieSchedId" hidden>@ViewBag.MovieSchedId</label>
+        
+
+        <div class="form-group">
+            <label class="form-label pull-left">Customer Name:</label>
+            <input type="text" id="customerName" name="customerName" />
+        </div>
+        <div class="form-group">
+            <label>Seat(s):</label>
+            <label id="selectedSeat"></label>
+        </div>
+        <div class="form-group">
+            <label>Price: P</label>
+            <label id="price"> @ViewBag.MovieDetail.Price</label>
+        </div>
+        <div class="form-group">
+            <label>Total amount: P</label>
+            <label id="total"></label>
+        </div>
+        <div class="form-group">
+            <button id="submit" onclick="submitForm()">Submit</button>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    var selectedSeats = [];
+    var listofSeats = [];
+    var price = document.getElementById('price').innerText;
+    var movieId = document.getElementById('movieId').innerText;
+    var movieSchedId = document.getElementById('movieSchedId').innerText;
+    var movieSched = document.getElementById('movieSched').innerText;
+    var totalAmount;
+
+
+    function btnClick(element) {
+        var selectedSeatNo = element.id;
+        var text = [];
+
+        if (element.classList.contains("clicked")) {
+            element.classList.remove("clicked");
+            selectedSeats.splice(selectedSeats.indexOf(element), 1);
+        }
+        else {
+            element.classList.add("clicked")
+            selectedSeats.push(element);
+        }
+
+        for (var i = 0; i < selectedSeats.length; i++) {
+            console.log(selectedSeats[i].id);
+            text.push(selectedSeats[i].id);
+        }
+
+        listofSeats = text;
+
+        document.getElementById('selectedSeat').innerHTML = text.join(", ");
+        console.log(document.getElementById('price').innerText);
+
+        totalAmount = document.getElementById('price').innerText * selectedSeats.length;
+        document.getElementById('total').innerHTML = totalAmount
+    }
+
+    function submitForm() {
+        var customerName = document.getElementById('customerName').value;
+
+        $.ajax({
+            type: "POST",
+            url: "/Seat/CreateReservation",
+            contentType: "application/json",
+            data: JSON.stringify({ mId: movieId, cname: customerName, seats: listofSeats, amount: totalAmount, mSchedId: movieSchedId, mSched: movieSched }),
+            success: function (response) {
+                if (response.result == 'Redirect')
+                    window.location = response.url;
+            }
+        });
+
+    }
+</script>
+

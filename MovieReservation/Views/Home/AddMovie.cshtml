@@ -1,0 +1,57 @@
+﻿@model MovieReservation.Models.MovieModel
+<div class="col-md-10">
+    <div class="row center-block">
+        <h3 class="pull-left"><b>Add Movie</b></h3>
+    </div>
+    <hr />
+
+    <div class="row text-center">
+        @using (Html.BeginForm("AddMovie", "Home", FormMethod.Post, new { enctype = "multipart/Form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Title:</label>
+                @Html.EditorFor(movie => movie.Title, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                @Html.ValidationMessageFor(movie => movie.Title, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Cast:</label>
+                @Html.EditorFor(movie => movie.Cast, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                @Html.ValidationMessageFor(movie => movie.Cast, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Category:</label>
+                @Html.EditorFor(movie => movie.Category, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                @Html.ValidationMessageFor(movie => movie.Category, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Run Time:</label>
+                @Html.EditorFor(movie => movie.RunTime, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                @Html.ValidationMessageFor(movie => movie.RunTime, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Synopsis:</label>
+                @Html.EditorFor(movie => movie.Synopsis, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                @Html.ValidationMessageFor(movie => movie.Synopsis, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Price:</label>
+                @Html.EditorFor(movie => movie.Price, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                @Html.ValidationMessageFor(movie => movie.Price, null, new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-2 pull-left">Movie Cover:</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="exampleInputFile" name="file">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-10 text-center">
+                <button class="btn btn-success">Save</button>
+            </div>
+        }
+    </div> 
+</div>
+

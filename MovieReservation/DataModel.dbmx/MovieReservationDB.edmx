@@ -1,0 +1,450 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MovieSeatReservationDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+          <Property Name="Cast" Type="nvarchar" MaxLength="500" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="RunTime" Type="nvarchar" MaxLength="50" />
+          <Property Name="Image" Type="nvarchar(max)" />
+          <Property Name="Synopsis" Type="nvarchar" MaxLength="500" />
+          <Property Name="Price" Type="float" />
+        </EntityType>
+        <EntityType Name="MovieReserve">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieId" Type="int" />
+          <Property Name="ReservationDate" Type="datetime" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SeatId" Type="int" />
+          <Property Name="ReservationStatusId" Type="int" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="MovieSchedule" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MovieSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScheduleDate" Type="datetime" />
+          <Property Name="ScheduledTime" Type="datetime" />
+          <Property Name="Schedule" Type="datetime" />
+          <Property Name="MovieId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReservationStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReservationStatusName" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="SeatAvailabilityPerSched">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeatId" Type="int" />
+          <Property Name="MovieScheduleId" Type="int" />
+          <Property Name="IsSeatAvailable" Type="bit" />
+        </EntityType>
+        <EntityType Name="Seats">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SeatNumber" Type="nvarchar" MaxLength="3" />
+          <Property Name="SeatRow" Type="int" />
+          <Property Name="SeatColumn" Type="int" />
+        </EntityType>
+        <Association Name="FK_MovieReserve_Movies">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
+          <End Role="MovieReserve" Type="Self.MovieReserve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieReserve">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieReserve_ReservationStatus">
+          <End Role="ReservationStatus" Type="Self.ReservationStatus" Multiplicity="0..1" />
+          <End Role="MovieReserve" Type="Self.MovieReserve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReservationStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieReserve">
+              <PropertyRef Name="ReservationStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieReserve_Seats">
+          <End Role="Seats" Type="Self.Seats" Multiplicity="0..1" />
+          <End Role="MovieReserve" Type="Self.MovieReserve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieReserve">
+              <PropertyRef Name="SeatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieSchedule_MovieSchedule">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+          <End Role="MovieSchedule" Type="Self.MovieSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieSchedule">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatAvailabilityPerSched_MovieSchedule">
+          <End Role="MovieSchedule" Type="Self.MovieSchedule" Multiplicity="0..1" />
+          <End Role="SeatAvailabilityPerSched" Type="Self.SeatAvailabilityPerSched" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MovieSchedule">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SeatAvailabilityPerSched">
+              <PropertyRef Name="MovieScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatAvailabilityPerSched_Seats">
+          <End Role="Seats" Type="Self.Seats" Multiplicity="0..1" />
+          <End Role="SeatAvailabilityPerSched" Type="Self.SeatAvailabilityPerSched" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SeatAvailabilityPerSched">
+              <PropertyRef Name="SeatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MovieSeatReservationDBModelStoreContainer">
+          <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovieReserve" EntityType="Self.MovieReserve" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovieSchedule" EntityType="Self.MovieSchedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReservationStatus" EntityType="Self.ReservationStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeatAvailabilityPerSched" EntityType="Self.SeatAvailabilityPerSched" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Seats" EntityType="Self.Seats" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MovieReserve_Movies" Association="Self.FK_MovieReserve_Movies">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="MovieReserve" EntitySet="MovieReserve" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieReserve_ReservationStatus" Association="Self.FK_MovieReserve_ReservationStatus">
+            <End Role="ReservationStatus" EntitySet="ReservationStatus" />
+            <End Role="MovieReserve" EntitySet="MovieReserve" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieReserve_Seats" Association="Self.FK_MovieReserve_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="MovieReserve" EntitySet="MovieReserve" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieSchedule_MovieSchedule" Association="Self.FK_MovieSchedule_MovieSchedule">
+            <End Role="Movie" EntitySet="Movie" />
+            <End Role="MovieSchedule" EntitySet="MovieSchedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatAvailabilityPerSched_MovieSchedule" Association="Self.FK_SeatAvailabilityPerSched_MovieSchedule">
+            <End Role="MovieSchedule" EntitySet="MovieSchedule" />
+            <End Role="SeatAvailabilityPerSched" EntitySet="SeatAvailabilityPerSched" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatAvailabilityPerSched_Seats" Association="Self.FK_SeatAvailabilityPerSched_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="SeatAvailabilityPerSched" EntitySet="SeatAvailabilityPerSched" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MovieSeatReservationDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Cast" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RunTime" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Synopsis" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" />
+          <NavigationProperty Name="MovieReserves" Relationship="Self.FK_MovieReservation_Movies" FromRole="Movie" ToRole="MovieReserve" />
+          <NavigationProperty Name="MovieSchedules" Relationship="Self.FK_MovieSchedule_MovieSchedule" FromRole="Movie" ToRole="MovieSchedule" />
+        </EntityType>
+        <EntityType Name="MovieReserve">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="MovieId" Type="Int32" />
+          <Property Name="ReservationDate" Type="DateTime" Precision="3" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SeatId" Type="Int32" />
+          <Property Name="ReservationStatusId" Type="Int32" />
+          <Property Name="TotalAmount" Type="Double" />
+          <NavigationProperty Name="Movie" Relationship="Self.FK_MovieReservation_Movies" FromRole="MovieReserve" ToRole="Movie" />
+          <NavigationProperty Name="ReservationStatu" Relationship="Self.FK_MovieReservation_ReservationStatus" FromRole="MovieReserve" ToRole="ReservationStatus" />
+          <NavigationProperty Name="Seat" Relationship="Self.FK_MovieReservation_Seats" FromRole="MovieReserve" ToRole="Seats" />
+          <Property Name="MovieSchedule" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MovieSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleDate" Type="DateTime" Precision="3" />
+          <Property Name="ScheduledTime" Type="DateTime" Precision="3" />
+          <Property Name="Schedule" Type="DateTime" Precision="3" />
+          <Property Name="MovieId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Movie" Relationship="Self.FK_MovieSchedule_MovieSchedule" FromRole="MovieSchedule" ToRole="Movie" />
+          <NavigationProperty Name="SeatAvailabilityPerScheds" Relationship="Self.FK_SeatAvailabilityPerSched_MovieSchedule" FromRole="MovieSchedule" ToRole="SeatAvailabilityPerSched" />
+        </EntityType>
+        <EntityType Name="ReservationStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReservationStatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MovieReserves" Relationship="Self.FK_MovieReservation_ReservationStatus" FromRole="ReservationStatus" ToRole="MovieReserve" />
+        </EntityType>
+        <EntityType Name="SeatAvailabilityPerSched">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeatId" Type="Int32" />
+          <Property Name="MovieScheduleId" Type="Int32" />
+          <Property Name="IsSeatAvailable" Type="Boolean" />
+          <NavigationProperty Name="MovieSchedule" Relationship="Self.FK_SeatAvailabilityPerSched_MovieSchedule" FromRole="SeatAvailabilityPerSched" ToRole="MovieSchedule" />
+          <NavigationProperty Name="Seat" Relationship="Self.FK_SeatAvailabilityPerSched_Seats" FromRole="SeatAvailabilityPerSched" ToRole="Seats" />
+        </EntityType>
+        <EntityType Name="Seat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SeatNumber" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="SeatRow" Type="Int32" />
+          <Property Name="SeatColumn" Type="Int32" />
+          <NavigationProperty Name="MovieReserves" Relationship="Self.FK_MovieReservation_Seats" FromRole="Seats" ToRole="MovieReserve" />
+          <NavigationProperty Name="SeatAvailabilityPerScheds" Relationship="Self.FK_SeatAvailabilityPerSched_Seats" FromRole="Seats" ToRole="SeatAvailabilityPerSched" />
+        </EntityType>
+        <Association Name="FK_MovieReservation_Movies">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="0..1" />
+          <End Role="MovieReserve" Type="Self.MovieReserve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieReserve">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieSchedule_MovieSchedule">
+          <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+          <End Role="MovieSchedule" Type="Self.MovieSchedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Movie">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieSchedule">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieReservation_ReservationStatus">
+          <End Role="ReservationStatus" Type="Self.ReservationStatu" Multiplicity="0..1" />
+          <End Role="MovieReserve" Type="Self.MovieReserve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReservationStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieReserve">
+              <PropertyRef Name="ReservationStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieReservation_Seats">
+          <End Role="Seats" Type="Self.Seat" Multiplicity="0..1" />
+          <End Role="MovieReserve" Type="Self.MovieReserve" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MovieReserve">
+              <PropertyRef Name="SeatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatAvailabilityPerSched_MovieSchedule">
+          <End Role="MovieSchedule" Type="Self.MovieSchedule" Multiplicity="0..1" />
+          <End Role="SeatAvailabilityPerSched" Type="Self.SeatAvailabilityPerSched" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MovieSchedule">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SeatAvailabilityPerSched">
+              <PropertyRef Name="MovieScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatAvailabilityPerSched_Seats">
+          <End Role="Seats" Type="Self.Seat" Multiplicity="0..1" />
+          <End Role="SeatAvailabilityPerSched" Type="Self.SeatAvailabilityPerSched" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Seats">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SeatAvailabilityPerSched">
+              <PropertyRef Name="SeatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MovieSeatReservationDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Movies" EntityType="Self.Movie" />
+          <EntitySet Name="MovieReserves" EntityType="Self.MovieReserve" />
+          <EntitySet Name="MovieSchedules" EntityType="Self.MovieSchedule" />
+          <EntitySet Name="ReservationStatus" EntityType="Self.ReservationStatu" />
+          <EntitySet Name="SeatAvailabilityPerScheds" EntityType="Self.SeatAvailabilityPerSched" />
+          <EntitySet Name="Seats" EntityType="Self.Seat" />
+          <AssociationSet Name="FK_MovieReservation_Movies" Association="Self.FK_MovieReservation_Movies">
+            <End Role="Movie" EntitySet="Movies" />
+            <End Role="MovieReserve" EntitySet="MovieReserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieSchedule_MovieSchedule" Association="Self.FK_MovieSchedule_MovieSchedule">
+            <End Role="Movie" EntitySet="Movies" />
+            <End Role="MovieSchedule" EntitySet="MovieSchedules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieReservation_ReservationStatus" Association="Self.FK_MovieReservation_ReservationStatus">
+            <End Role="ReservationStatus" EntitySet="ReservationStatus" />
+            <End Role="MovieReserve" EntitySet="MovieReserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieReservation_Seats" Association="Self.FK_MovieReservation_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="MovieReserve" EntitySet="MovieReserves" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatAvailabilityPerSched_MovieSchedule" Association="Self.FK_SeatAvailabilityPerSched_MovieSchedule">
+            <End Role="MovieSchedule" EntitySet="MovieSchedules" />
+            <End Role="SeatAvailabilityPerSched" EntitySet="SeatAvailabilityPerScheds" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatAvailabilityPerSched_Seats" Association="Self.FK_SeatAvailabilityPerSched_Seats">
+            <End Role="Seats" EntitySet="Seats" />
+            <End Role="SeatAvailabilityPerSched" EntitySet="SeatAvailabilityPerScheds" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MovieSeatReservationDBModelStoreContainer" CdmEntityContainer="MovieSeatReservationDBEntities">
+          <EntitySetMapping Name="Movies">
+            <EntityTypeMapping TypeName="MovieSeatReservationDBModel.Movie">
+              <MappingFragment StoreEntitySet="Movie">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Cast" ColumnName="Cast" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="RunTime" ColumnName="RunTime" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Synopsis" ColumnName="Synopsis" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovieReserves">
+            <EntityTypeMapping TypeName="MovieSeatReservationDBModel.MovieReserve">
+              <MappingFragment StoreEntitySet="MovieReserve">
+                <ScalarProperty Name="MovieSchedule" ColumnName="MovieSchedule" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="ReservationDate" ColumnName="ReservationDate" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="SeatId" ColumnName="SeatId" />
+                <ScalarProperty Name="ReservationStatusId" ColumnName="ReservationStatusId" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovieSchedules">
+            <EntityTypeMapping TypeName="MovieSeatReservationDBModel.MovieSchedule">
+              <MappingFragment StoreEntitySet="MovieSchedule">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ScheduleDate" ColumnName="ScheduleDate" />
+                <ScalarProperty Name="ScheduledTime" ColumnName="ScheduledTime" />
+                <ScalarProperty Name="Schedule" ColumnName="Schedule" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReservationStatus">
+            <EntityTypeMapping TypeName="MovieSeatReservationDBModel.ReservationStatu">
+              <MappingFragment StoreEntitySet="ReservationStatus">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ReservationStatusName" ColumnName="ReservationStatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SeatAvailabilityPerScheds">
+            <EntityTypeMapping TypeName="MovieSeatReservationDBModel.SeatAvailabilityPerSched">
+              <MappingFragment StoreEntitySet="SeatAvailabilityPerSched">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SeatId" ColumnName="SeatId" />
+                <ScalarProperty Name="MovieScheduleId" ColumnName="MovieScheduleId" />
+                <ScalarProperty Name="IsSeatAvailable" ColumnName="IsSeatAvailable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Seats">
+            <EntityTypeMapping TypeName="MovieSeatReservationDBModel.Seat">
+              <MappingFragment StoreEntitySet="Seats">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SeatNumber" ColumnName="SeatNumber" />
+                <ScalarProperty Name="SeatRow" ColumnName="SeatRow" />
+                <ScalarProperty Name="SeatColumn" ColumnName="SeatColumn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,89 @@
+﻿@model MovieReservation.Models.MovieScheduleModel
+
+<style>
+    .first-row {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .box {
+        margin-bottom: 50px;
+    }
+
+    .time-format {
+        padding: 5px;
+        border: 3px solid black;
+        margin-top: 10px;
+    }
+
+    .table-bordered {
+        table-layout: auto;
+    }
+
+    .btn {
+        margin: 10px 0px 10px 0px;
+    }
+</style>
+<div class="col-md-10 text-center">
+    <div class="first-row center-block col-md-10">
+        <div class="row col-md-3">
+            <img src="~/Content/MovieCovers/@ViewBag.Movie.Image" width="110" height="150" />
+        </div>
+        <div class="row col-md-7">
+            <h3 class="pull-left col-md-10"><b>Add Schedule</b></h3>
+            <p class="pull-left col-md-10">Create schedule for the movie: <b>@ViewBag.Movie.Title</b></p>
+        </div>
+
+    </div>
+    <hr />
+
+    <div class="box col-md-6">
+        <h4><b>Schedules:</b></h4>
+        <table class="table-bordered">
+            <tr>
+                <th class="text-center">Dates</th>
+                <th class="text-center">Time Schedule</th>
+            </tr>
+            @foreach (var item in ViewBag.Schedules)
+            {
+                <tr>
+                    <td>@item.Key.ToString("MMMM dd, yyyy")</td>
+                    <td>
+                        @foreach (var sched in item.Value)
+                        {
+
+                            if (sched.ScheduleDate.Date == item.Key.Date)
+                            {
+                                <button class="btn btn-outline-primary">@sched.ScheduleTime.ToString("h:mm tt").ToUpper()</button>
+                            }
+
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+
+    <div class="row col-md-10  text-center">
+        @using (Html.BeginForm("AddSchedule", "MovieDetail", FormMethod.Post, new { enctype = "multipart/Form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(model => model.MovieId,
+                new { id = "Movie", Value = ViewBag.Movie.Id })
+
+            <div class="form-group col-sm-10">
+                <label class="col-md-3 pull-left">Screen Time:</label>
+                @Html.TextBoxFor(model => model.ScheduleDate, new { @class = "form-control", type = "date", step = 1 })
+            </div>
+            <div class="form-group col-sm-10">
+                <label class="col-md-3 pull-left">Screen Time:</label>
+                @Html.TextBoxFor(model => model.ScheduleTime, new { @class = "form-control timepicker-holdOffTime", type = "time", step = 1 })
+            </div>
+            <div class="form-group col-sm-10 pull-right">
+                <button class="btn btn-success">Save</button>
+            </div>
+        }
+    </div>
+</div>

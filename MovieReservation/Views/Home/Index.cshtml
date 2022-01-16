@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MovieReservation.DataModel.dbmx.Movie>
+<style>
+    .box {
+        border: 1px solid black;
+        margin-top: 30px;
+        padding: 20px 0px 20px 0;
+    }
+
+    .movie-title {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .card {
+        border-bottom: 1px solid black;
+        height: 40px;
+        padding-top: 2px;
+    }
+
+    .now-showing {
+        font-size: 20px;
+        padding-left: 30px;
+        margin-bottom: 30px;
+    }
+</style>
+<div class="box row col-md-12">
+    <div class="card center-block">
+        <p class="now-showing pull-left"><b>Now Showing</b></p>
+        <br />
+    </div>
+
+    <div class="row col-md-12">
+        @foreach (var movie in Model)
+        {
+            <div class="col-md-4 text-center">
+                <img src="~/Content/MovieCovers/@movie.Image" width="200" height="350" />
+                <p class="movie-title">@movie.Title</p>
+                <p class="text-center">
+                    @Html.ActionLink("More Details", "MovieDetail", "MovieDetail", new { id = movie.Id }, new { @class = "btn btn-primary" })
+                </p>
+            </div>
+        }
+    </div>
+
+</div>

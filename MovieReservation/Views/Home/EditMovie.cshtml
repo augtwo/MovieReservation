@@ -1,0 +1,65 @@
+﻿@model MovieReservation.Models.MovieModel
+<div class="col-md-12">
+    <div class="row center-block">
+        <h3 class="pull-left"><b>Edit Movie</b></h3>
+    </div>
+    <hr />
+
+    <div class="row">
+        @using (Html.BeginForm("EditMovie", "Home", FormMethod.Post, new { enctype = "multipart/Form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(movie => movie.Id)
+
+            <div class="form-group col-sm-5">
+                <label class="col-md-4 pull-left">Movie Cover:</label>
+                <img src="/Content/MovieCovers/@Model.Image" width="220" height="310" />
+                <br />
+                <br />
+                <div class="input-group pull-right">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="exampleInputFile" name="file">
+                    </div>
+                </div>
+                <br /><br />
+            </div>
+            <div class="form-group col-sm-7">
+                <div class="form-group">
+                    <label class="col-md-2 pull-left">Title:</label>
+                    @Html.EditorFor(movie => movie.Title, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(movie => movie.Title, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 pull-left">Cast:</label>
+                    @Html.EditorFor(movie => movie.Cast, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(movie => movie.Cast, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 pull-left">Category:</label>
+                    @Html.EditorFor(movie => movie.Category, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(movie => movie.Category, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 pull-left">Run Time:</label>
+                    @Html.EditorFor(movie => movie.RunTime, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(movie => movie.RunTime, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 pull-left">Synopsis:</label>
+                    @Html.EditorFor(movie => movie.Synopsis, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(movie => movie.Synopsis, null, new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 pull-left">Price:</label>
+                    @Html.EditorFor(movie => movie.Price, new { htmlAttributes = new { @type = "text", @class = "form-control" } })
+                    @Html.ValidationMessageFor(movie => movie.Price, null, new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-sm-10 text-center">
+                <button class="btn btn-success">Save</button>
+            </div>
+        }
+    </div>
+</div>
+
